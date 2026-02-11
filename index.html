@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>valentines web</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  height:100vh;
+background: radial-gradient(circle at top, #7a0000, #2b0000);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-family:'Segoe UI',sans-serif;
+  overflow:hidden;
+  color:white;
+}
+
+.container{
+  background:rgba(255,255,255,0.1);
+  backdrop-filter:blur(12px);
+  padding:30px 25px;
+  border-radius:25px;
+  text-align:center;
+  width:92%;
+  max-width:400px;
+  box-shadow:0 0 30px rgba(255,100,150,0.4);
+  animation:pop 0.8s ease;
+}
+
+@keyframes pop{
+  from{transform:scale(0);}
+  to{transform:scale(1);}
+}
+
+h1{margin:5px 0;}
+p{font-size:18px;}
+
+.buttons{
+  margin-top:25px;
+  position:relative;
+  height:90px;
+}
+
+button{
+  padding:12px 24px;
+  border:none;
+  border-radius:30px;
+  font-size:16px;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+#yes{
+  background:linear-gradient(45deg, hotpink, deeppink);
+  color:white;
+  box-shadow:0 0 12px pink;
+}
+
+#yes:hover{transform:scale(1.15);}
+
+#no{
+  background:white;
+  color:maroon;
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
+}
+
+.heart{
+  position:absolute;
+  font-size:20px;
+  animation:float 6s linear infinite;
+  opacity:0.8;
+}
+
+@keyframes float{
+  from{transform:translateY(100vh) scale(0.6);}
+  to{transform:translateY(-10vh) scale(1.2);}
+}
+
+.hidden{display:none;}
+
+.chat{
+  text-align:left;
+  max-height:320px;
+  overflow-y:auto;
+  padding-right:5px;
+}
+
+.msg{
+  margin:8px 0;
+  padding:8px 12px;
+  border-radius:15px;
+  max-width:85%;
+  animation:pop 0.3s ease;
+}
+
+.left{
+  background:#ffffff22;
+  border-bottom-left-radius:0;
+}
+
+.right{
+  background:hotpink;
+  color:white;
+  margin-left:auto;
+  border-bottom-right-radius:0;
+}
+
+.typing{
+  font-style:italic;
+  opacity:0.7;
+  margin-top:10px;
+}
+
+.cursor{
+  animation:blink 1s infinite;
+}
+
+@keyframes blink{
+  50%{opacity:0;}
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container" id="screen1">
+
+  <h1>Hey Moh 💖💖</h1>
+  <p id="type"></p>
+
+  <div class="buttons">
+    <button id="yes" onclick="startStory()">Yes 😍</button>
+    <button id="no" onmouseover="escape()">No 🙈</button>
+  </div>
+
+</div>
+
+<div class="container hidden" id="screen2">
+
+  <h1>💬 Our Little Chat</h1>
+
+  <div class="chat" id="chat"></div>
+  <div class="typing" id="typing"></div>
+
+</div>
+
+<script>
+
+const typingText = "I was thinking about something important and it involves you 😌💖...wanna hear about it";
+let i=0;
+
+function typingEffect(){
+  if(i < typingText.length){
+    document.getElementById("type").innerHTML += typingText.charAt(i);
+    i++;
+    setTimeout(typingEffect, 60);
+  }
+}
+typingEffect();
+
+function escape(){
+  const no = document.getElementById("no");
+  const x = Math.random()*300 - 150;
+  const y = Math.random()*160 - 80;
+  no.style.transform = `translate(${x}px,${y}px)`;
+}
+
+function startStory(){
+  document.getElementById("screen1").classList.add("hidden");
+  document.getElementById("screen2").classList.remove("hidden");
+  startChat();
+}
+
+const convo = [
+  {side:"left", text:"Hey... i know we haven't talked much"},
+  {side:"right", text:"mmh "},
+  {side:"left", text:"and i hope it's not too late ...as they say better late than never😝"},
+  {side:"right", text:"😂😂yeah"},
+  {side:"left", text:"but i got one question for you?"},
+  {side:"right", text:"...sure"},
+  {side:"left", text:".. wanna you be my Valentine? 🌹❤️"}
+];
+
+let msgIndex = 0;
+
+function startChat(){
+  showMessage();
+}
+
+function showMessage(){
+  if(msgIndex < convo.length){
+    const typing = document.getElementById("typing");
+    typing.innerHTML = "typing<span class='cursor'>...</span>";
+
+    setTimeout(()=>{
+      typing.innerHTML = "";
+      const msg = document.createElement("div");
+      msg.className = "msg " + convo[msgIndex].side;
+      msg.innerText = convo[msgIndex].text;
+      document.getElementById("chat").appendChild(msg);
+      document.getElementById("chat").scrollTop = 9999;
+      msgIndex++;
+      setTimeout(showMessage, 900);
+    }, 1000);
+  }
+}
+
+for(let i=0;i<40;i++){
+  const h=document.createElement("div");
+  h.className="heart";
+  h.innerHTML="❤";
+  h.style.left=Math.random()*100+"vw";
+  h.style.animationDelay=Math.random()*6+"s";
+  h.style.fontSize=Math.random()*20+15+"px";
+  document.body.appendChild(h);
+}
+
+</script>
+
+</body>
+</html>
